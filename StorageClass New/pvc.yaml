@@ -1,0 +1,160 @@
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: migration-server-pvc
+#   labels:
+#     app.kubernetes.io/name: redis
+#   namespace: redis
+# spec:
+#   accessModes:
+#     - ReadWriteOnce
+#   storageClassName: gp2
+#   resources:
+#     requests:
+#       storage: 30Gi  # Request the same capacity as your PV
+#   selector:
+#     matchLabels:
+#       volume: migration-server-pv  # The label to match your PV
+
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: migration-server-pvc
+spec:
+  storageClassName: "gp2" # Empty string must be explicitly set otherwise default StorageClass will be set
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi
+
+--- 
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-ebs-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ebs-sc-new
+  resources:
+    requests:
+      storage: 40Gi
+
+--- 
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-redis-cluster-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ebs-sc-new
+  resources:
+    requests:
+      storage: 40Gi
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-ebs-claim
+  namespace: redis
+  uid: 9ffc6db2-16d0-4126-9ebb-fd66a4b31a7c
+  resourceVersion: '11307503'
+  creationTimestamp: '2023-11-14T07:04:11Z'
+  labels:
+    k8slens-edit-resource-version: v1
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: >
+      {"apiVersion":"v1","kind":"PersistentVolumeClaim","metadata":{"annotations":{},"name":"my-ebs-claim","namespace":"redis"},"spec":{"accessModes":["ReadWriteOnce"],"resources":{"requests":{"storage":"40Gi"}},"storageClassName":"ebs-sc-new"}}
+    pv.kubernetes.io/bind-completed: 'yes'
+    pv.kubernetes.io/bound-by-controller: 'yes'
+  finalizers:
+    - kubernetes.io/pvc-protection
+  managedFields:
+    - manager: kubectl-client-side-apply
+      operation: Update
+      apiVersion: v1
+      time: '2023-11-14T07:04:11Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:kubectl.kubernetes.io/last-applied-configuration: {}
+        f:spec:
+          f:accessModes: {}
+          f:resources:
+            f:requests: {}
+          f:storageClassName: {}
+          f:volumeMode: {}
+    - manager: kube-controller-manager
+      operation: Update
+      apiVersion: v1
+      time: '2023-11-14T07:04:18Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            f:pv.kubernetes.io/bind-completed: {}
+            f:pv.kubernetes.io/bound-by-controller: {}
+        f:spec:
+          f:volumeName: {}
+    - manager: kube-controller-manager
+      operation: Update
+      apiVersion: v1
+      time: '2023-11-14T07:04:18Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:status:
+          f:accessModes: {}
+          f:capacity: {}
+          f:phase: {}
+      subresource: status
+    - manager: node-fetch
+      operation: Update
+      apiVersion: v1
+      time: '2023-11-23T15:40:31Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:labels:
+            .: {}
+            f:k8slens-edit-resource-version: {}
+        f:spec:
+          f:resources:
+            f:requests:
+              f:storage: {}
+    - manager: kubelet
+      operation: Update
+      apiVersion: v1
+      time: '2023-11-23T15:40:50Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:status:
+          f:capacity:
+            f:storage: {}
+      subresource: status
+  selfLink: /api/v1/namespaces/redis/persistentvolumeclaims/my-ebs-claim
+status:
+  phase: Bound
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 512Gi
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 512Gi
+  volumeName: my-existing-ebs-volume
+  storageClassName: ebs-sc-new
+  volumeMode: Filesystem
+
+
