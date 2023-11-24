@@ -65,6 +65,25 @@ master:
             operator: In
             values:
             - brompton-energy
+          - key: role
+            operator: In
+            values:
+            - master
+          - key: node-group
+            operator: In
+            values:
+            - redis-master
+    podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: role
+                  operator: In
+                  values:
+                  - master
+              topologyKey: kubernetes.io/hostname
   args: []
   command: []
   configuration: ""
@@ -327,6 +346,25 @@ replica:
             operator: In
             values:
             - brompton-energy
+          - key: role
+            operator: In
+            values:
+            - replica
+          # - key: node-group
+          #   operator: In
+          #   values:
+          #   - redis-replica-0
+    podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: role
+                  operator: In
+                  values:
+                  - replica
+              topologyKey: kubernetes.io/hostname
   args: []
   autoscaling:
     enabled: false
