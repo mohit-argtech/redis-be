@@ -4,8 +4,8 @@ metadata:
   name: redis-node
   namespace: redis
   uid: 066aae32-7afa-4772-aafe-95ca14698a09
-  resourceVersion: '12479422'
-  generation: 7
+  resourceVersion: '12539102'
+  generation: 15
   creationTimestamp: '2023-11-27T05:09:00Z'
   labels:
     app.kubernetes.io/component: node
@@ -22,12 +22,11 @@ metadata:
     - manager: node-fetch
       operation: Update
       apiVersion: apps/v1
-      time: '2023-11-27T05:31:08Z'
       fieldsType: FieldsV1
       fieldsV1:
-        f:metadata:
-          f:labels:
-            f:k8slens-edit-resource-version: {}
+        f:spec:
+          f:replicas: {}
+      subresource: scale
     - manager: helm
       operation: Update
       apiVersion: apps/v1
@@ -53,7 +52,6 @@ metadata:
             f:whenDeleted: {}
             f:whenScaled: {}
           f:podManagementPolicy: {}
-          f:replicas: {}
           f:revisionHistoryLimit: {}
           f:selector: {}
           f:serviceName: {}
@@ -76,12 +74,8 @@ metadata:
             f:spec:
               f:affinity:
                 .: {}
-                f:nodeAffinity:
-                  .: {}
-                  f:requiredDuringSchedulingIgnoredDuringExecution: {}
-                f:podAntiAffinity:
-                  .: {}
-                  f:preferredDuringSchedulingIgnoredDuringExecution: {}
+                f:nodeAffinity: {}
+                f:podAntiAffinity: {}
               f:automountServiceAccountToken: {}
               f:containers:
                 k:{"name":"redis"}:
@@ -419,10 +413,30 @@ metadata:
               f:partition: {}
             f:type: {}
           f:volumeClaimTemplates: {}
+    - manager: node-fetch
+      operation: Update
+      apiVersion: apps/v1
+      time: '2023-11-27T08:03:24Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:labels:
+            f:k8slens-edit-resource-version: {}
+        f:spec:
+          f:template:
+            f:metadata:
+              f:annotations:
+                f:kubectl.kubernetes.io/restartedAt: {}
+            f:spec:
+              f:affinity:
+                f:nodeAffinity:
+                  f:requiredDuringSchedulingIgnoredDuringExecution: {}
+                f:podAntiAffinity:
+                  f:preferredDuringSchedulingIgnoredDuringExecution: {}
     - manager: kube-controller-manager
       operation: Update
       apiVersion: apps/v1
-      time: '2023-11-27T05:37:16Z'
+      time: '2023-11-27T09:51:37Z'
       fieldsType: FieldsV1
       fieldsV1:
         f:status:
@@ -438,17 +452,17 @@ metadata:
       subresource: status
   selfLink: /apis/apps/v1/namespaces/redis/statefulsets/redis-node
 status:
-  observedGeneration: 7
-  replicas: 1
-  readyReplicas: 1
-  currentReplicas: 1
-  updatedReplicas: 1
-  currentRevision: redis-node-5c74d57df8
-  updateRevision: redis-node-5c74d57df8
+  observedGeneration: 15
+  replicas: 3
+  readyReplicas: 3
+  currentReplicas: 3
+  updatedReplicas: 3
+  currentRevision: redis-node-98dd9bb6d
+  updateRevision: redis-node-98dd9bb6d
   collisionCount: 0
-  availableReplicas: 1
+  availableReplicas: 3
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app.kubernetes.io/component: node
@@ -469,11 +483,9 @@ spec:
         checksum/health: 1eace71641fb5bd753e90012419e82c10b1180d694f91d83743b727a5aacca73
         checksum/scripts: 6db9dc4c1c9395f33c8e429d9e93a27f73114fb6024ad906f1fded0add8f7c64
         checksum/secret: dff5557db7be8b15cb7ea41a5ff4270286aa3ac77064bdcbfc382b22713052b6
+        kubectl.kubernetes.io/restartedAt: '2023-11-27T08:03:24Z'
     spec:
       volumes:
-        # - name: redis-data-backup
-        #   persistentVolumeClaim:
-        #     claimName: redis-data-redis-master-0
         - name: start-scripts
           configMap:
             name: redis-scripts
@@ -554,8 +566,6 @@ spec:
               cpu: 500m
               memory: 512Mi
           volumeMounts:
-            # - name: redis-data-backup
-            #   mountPath: /data/backup
             - name: start-scripts
               mountPath: /opt/bitnami/scripts/start-scripts
             - name: health
@@ -738,20 +748,16 @@ spec:
                     operator: In
                     values:
                       - brompton-energy
-                  - key: role
-                    operator: In
-                    values:
-                      - replica
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
             - weight: 100
               podAffinityTerm:
                 labelSelector:
                   matchExpressions:
-                    - key: role
+                    - key: application
                       operator: In
                       values:
-                        - replica
+                        - redis
                 topologyKey: kubernetes.io/hostname
       schedulerName: default-scheduler
       enableServiceLinks: true
