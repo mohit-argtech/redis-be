@@ -529,7 +529,7 @@ sentinel:
   customStartupProbe: {}
   downAfterMilliseconds: 60000
   enableServiceLinks: true
-  enabled: false
+  enabled: true
   externalMaster:
     enabled: false
     host: ""
@@ -557,7 +557,7 @@ sentinel:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 5
-  masterSet: mymaster
+  masterSet: redis-master-0
   parallelSyncs: 1
   persistence:
     accessModes:
@@ -568,9 +568,9 @@ sentinel:
     labels: {}
     medium: ""
     selector: {}
-    size: 100Mi
+    size: 200Mi
     sizeLimit: ""
-    storageClass: ""
+    storageClass: "gp2"
   persistentVolumeClaimRetentionPolicy:
     enabled: true
     whenDeleted: Retain
@@ -586,8 +586,12 @@ sentinel:
     timeoutSeconds: 1
   redisShutdownWaitFailover: true
   resources:
-    limits: {}
-    requests: {}
+    limits: 
+      cpu: 250m
+      memory: 256Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
   service:
     annotations: {}
     clusterIP: ""
