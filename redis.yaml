@@ -139,7 +139,7 @@ master:
     annotations: {}
     dataSource: {}
     enabled: true
-    existingClaim: ""
+    existingClaim: "redis-data-redis-master-0"
     labels: {}
     medium: ""
     path: /data
@@ -506,6 +506,31 @@ replica:
     type: RollingUpdate
 secretAnnotations: {}
 sentinel:
+  replicas: 3
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: application
+            operator: In
+            values:
+            - redis
+          - key: company
+            operator: In
+            values:
+            - brompton-energy
+    podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: application
+                  operator: In
+                  values:
+                  - redis
+              topologyKey: kubernetes.io/hostname
   annotations: {}
   args: []
   automateClusterRecovery: false
@@ -548,7 +573,7 @@ sentinel:
     pullSecrets: []
     registry: docker.io
     repository: bitnami/redis-sentinel
-    tag: 7.2.3-debian-11-r0
+    tag: 6.2.6
   lifecycleHooks: {}
   livenessProbe:
     enabled: true
@@ -557,18 +582,18 @@ sentinel:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 5
-  masterSet: redis-master-0
+  masterSet: mymaster
   parallelSyncs: 1
   persistence:
     accessModes:
     - ReadWriteOnce
     annotations: {}
     dataSource: {}
-    enabled: false
+    enabled: true
     labels: {}
     medium: ""
     selector: {}
-    size: 200Mi
+    size: 150Gi
     sizeLimit: ""
     storageClass: "gp2"
   persistentVolumeClaimRetentionPolicy:
@@ -580,18 +605,18 @@ sentinel:
   readinessProbe:
     enabled: true
     failureThreshold: 6
-    initialDelaySeconds: 20
+    initialDelaySeconds: 100
     periodSeconds: 5
     successThreshold: 1
-    timeoutSeconds: 1
+    timeoutSeconds: 3
   redisShutdownWaitFailover: true
   resources:
     limits: 
-      cpu: 250m
-      memory: 256Mi
+      cpu: 1000m
+      memory: 24Gi
     requests:
       cpu: 250m
-      memory: 256Mi
+      memory: 512Mi
   service:
     annotations: {}
     clusterIP: ""
@@ -612,8 +637,8 @@ sentinel:
     type: ClusterIP
   startupProbe:
     enabled: true
-    failureThreshold: 22
-    initialDelaySeconds: 10
+    failureThreshold: 32
+    initialDelaySeconds: 20
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 5
