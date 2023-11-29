@@ -9,7 +9,7 @@ spec:
     app.kubernetes.io/component: node
     app.kubernetes.io/name: redis
     app.kubernetes.io/instance: redis
-    apps.kubernetes.io/pod-index: '0'
+    statefulset.kubernetes.io/pod-name: redis-node-0
     # Add any additional labels to select the specific node
   ports:
     - name: redis
@@ -27,7 +27,7 @@ spec:
     app.kubernetes.io/component: node
     app.kubernetes.io/name: redis
     app.kubernetes.io/instance: redis
-    apps.kubernetes.io/pod-index: '1'
+    statefulset.kubernetes.io/pod-name: redis-node-1
     # Add any additional labels to select the specific node
   ports:
     - name: redis
@@ -45,7 +45,7 @@ spec:
     app.kubernetes.io/component: node
     app.kubernetes.io/name: redis
     app.kubernetes.io/instance: redis
-    apps.kubernetes.io/pod-index: '2'
+    statefulset.kubernetes.io/pod-name: redis-node-2
     # Add any additional labels to select the specific node
   ports:
     - name: redis
