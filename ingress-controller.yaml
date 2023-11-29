@@ -73,20 +73,20 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: redis-s0
+                name: redis-s0-external
                 port:
                   number: 26379
           - path: /redis1
             pathType: Prefix
             backend:
               service:
-                name: redis-s1
+                name: redis-s1-external
                 port:
                   number: 26379
           - path: /redis2
             pathType: Prefix
             backend:
               service:
-                name: redis-s2
+                name: redis-s2-external
                 port:
                   number: 26379
