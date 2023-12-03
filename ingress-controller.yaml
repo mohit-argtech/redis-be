@@ -51,10 +51,50 @@
 #                   number: 26379
 
 
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: be-ingress
+#   namespace: redis
+# spec:
+#   ingressClassName: nginx
+#   rules:
+#     - host: ae8015925a7ce4e8aad7645b58f6a26e-7eb833e710fe847d.elb.us-east-1.amazonaws.com  
+#       http:
+#         paths:
+#           - path: /
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: redisinsight-service
+#                 port:
+#                   number: 8001
+#           - path: /redis0
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: redis-s0
+#                 port:
+#                   number: 26379
+#           - path: /redis1
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: redis-s1
+#                 port:
+#                   number: 26379
+#           - path: /redis2
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: redis-s2
+#                 port:
+#                   number: 26379
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: be-ingress
+  name: be-ingress-redis
   namespace: ingress-nginx
 spec:
   ingressClassName: nginx
@@ -62,7 +102,7 @@ spec:
     - host: ae8015925a7ce4e8aad7645b58f6a26e-7eb833e710fe847d.elb.us-east-1.amazonaws.com  
       http:
         paths:
-          - path: /
+          - path: /redisinsight
             pathType: Prefix
             backend:
               service:
