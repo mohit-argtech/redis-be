@@ -48,7 +48,7 @@ metadata:
   name: redis-py-app-pv
 spec:
   capacity:
-    storage: 3Gi  # Adjust the storage size as needed
+    storage: 8Gi  # Adjust the storage size as needed
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
@@ -112,7 +112,7 @@ spec:
       containers:
         - name:  redis-py-app #Container name (DNS_LABEL, unique)
           image: sahil2898/redis-py-code #repo/image
-          imagePullPolicy: IfNotPresent #Always pull image
+          imagePullPolicy: Always #Always pull image
           volumeMounts:
           - name: db #Pod volumes to mount into the container's filesystem. Cannot be updated.
             mountPath: /db
