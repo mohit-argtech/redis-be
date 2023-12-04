@@ -40,7 +40,7 @@ spec:
  - port: 26379
    targetPort: 26379
    protocol: TCP
- type: LoadBalancer
+ type: ClusterIP
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -60,6 +60,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
+  namespace: redis
   name: redis-py-app-pv-claim
   labels:
     app: redis-py-app
@@ -110,11 +111,11 @@ spec:
           terminationMessagePolicy: File
       containers:
         - name:  redis-py-app #Container name (DNS_LABEL, unique)
-          image: redislabs/redisinsight:latest #repo/image
+          image: sahil2898/redis-py-code #repo/image
           imagePullPolicy: IfNotPresent #Always pull image
           volumeMounts:
           - name: db #Pod volumes to mount into the container's filesystem. Cannot be updated.
             mountPath: /db
           ports:
-          - containerPort: 8001 #exposed container port and protocol
+          - containerPort: 26379 #exposed container port and protocol
             protocol: TCP
