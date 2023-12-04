@@ -12,6 +12,7 @@ spec:
       targetPort: 8001
   selector:
     app: redisinsight
+  type : LoadBalancer
 ---
 apiVersion: v1
 kind: PersistentVolume
