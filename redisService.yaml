@@ -12,10 +12,10 @@ spec:
     statefulset.kubernetes.io/pod-name: redis-node-0
     # Add any additional labels to select the specific node
   ports:
-    - name: redis-s0
+    - name: redis-s0-port
       port: 26379
       targetPort: 26379
-  type: LoadBalancer
+  type: ClusterIP
 
 --- 
 apiVersion: v1
@@ -31,10 +31,10 @@ spec:
     statefulset.kubernetes.io/pod-name: redis-node-1
     # Add any additional labels to select the specific node
   ports:
-    - name: redis-s1
+    - name: redis-s1-port
       port: 26379
       targetPort: 26379
-  type: LoadBalancer
+  type: ClusterIP
 
 --- 
 apiVersion: v1
@@ -50,7 +50,7 @@ spec:
     statefulset.kubernetes.io/pod-name: redis-node-2
     # Add any additional labels to select the specific node
   ports:
-    - name: redis-s2
+    - name: redis-s2-port
       port: 26379
       targetPort: 26379
-  type: LoadBalancer
+  type: ClusterIP
