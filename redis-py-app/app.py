@@ -1,8 +1,8 @@
 import redis
 from redis.sentinel import Sentinel
-sentinel = Sentinel([('ae0181f6b69c249fe9b89d365ab10aaa-1367026668.us-east-1.elb.amazonaws.com', 26379),
-                     ('aa12b520bca654523840d277225fb97c-400453335.us-east-1.elb.amazonaws.com',26379),
-                     ('aeddf30b34e2c4a03be038e21129b311-60908045.us-east-1.elb.amazonaws.com',26379)],
+sentinel = Sentinel([('aa5a07165a1d844c58e040f0e67b2edb-922594e05d12f077.elb.us-east-1.amazonaws.com/redisone', 26379),
+                     ('aa5a07165a1d844c58e040f0e67b2edb-922594e05d12f077.elb.us-east-1.amazonaws.com/redistwo',26379),
+                     ('aa5a07165a1d844c58e040f0e67b2edb-922594e05d12f077.elb.us-east-1.amazonaws.com/redisthree',26379)],
                    sentinel_kwargs={'password': 'test@123'})
 # you will need to handle yourself the connection to pass again the password
 # and avoid AuthenticationError at redis queries
