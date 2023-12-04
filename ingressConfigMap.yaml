@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tcp-services
+  namespace: redis
+data:
+  # Port to expose Redis on: name of the Redis service
+  "26379": "redis/redis-s0:26379"
