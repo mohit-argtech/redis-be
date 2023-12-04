@@ -47,40 +47,32 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
+  ingressClassName: nginx
   rules:
-  - host: ae0181f6b69c249fe9b89d365ab10aaa-1367026668.us-east-1.elb.amazonaws.com
+  - host: aa5a07165a1d844c58e040f0e67b2edb-922594e05d12f077.elb.us-east-1.amazonaws.com
     http:
       paths:
       - pathType: Prefix
-        path: /
+        path: /redisone
         backend:
           service:
             name: redis-s0
             port:
               number: 26379
-  - host: aa12b520bca654523840d277225fb97c-400453335.us-east-1.elb.amazonaws.com
-    http:
-      paths:
       - pathType: Prefix
-        path: /
+        path: /redistwo
         backend:
           service:
             name: redis-s1
             port:
               number: 26379
-  - host: aeddf30b34e2c4a03be038e21129b311-60908045.us-east-1.elb.amazonaws.com
-    http:
-      paths:
       - pathType: Prefix
-        path: /
+        path: /redisthree
         backend:
           service:
             name: redis-s2
             port:
               number: 26379
-  - host: a87ab215cf2d14e538d7e6509faeef91-364853226.us-east-1.elb.amazonaws.com
-    http:
-      paths:
       - pathType: Prefix
         path: /
         backend:
