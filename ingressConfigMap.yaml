@@ -6,3 +6,5 @@ metadata:
 data:
   # Port to expose Redis on: name of the Redis service
   "26379": "redis/redis-s0:26379"
+  "26378": "redis/redis-s1:26379"
+  "26376": "redis/redis-s2:26379"
