@@ -54,6 +54,13 @@ spec:
     http:
       paths:
       - pathType: Prefix
+        path: /redis
+        backend:
+          service:
+            name: redis-headless
+            port:
+              number: 26379
+      - pathType: Prefix
         path: /redisone
         backend:
           service:
