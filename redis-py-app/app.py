@@ -20,9 +20,10 @@ import redis
 import redis.sentinel
 
 sentinel = redis.sentinel.Sentinel(
-    sentinels=[('aa5a07165a1d844c58e040f0e67b2edb-922594e05d12f077.elb.us-east-1.amazonaws.com/redisone', 26379),
-                     ('aa5a07165a1d844c58e040f0e67b2edb-922594e05d12f077.elb.us-east-1.amazonaws.com/redistwo',26378),
-                     ('aa5a07165a1d844c58e040f0e67b2edb-922594e05d12f077.elb.us-east-1.amazonaws.com/redisthree',26376)],
+    sentinels=[('redis-s0', 26379),
+               ('redis-s1', 26379),
+               ('redis-s2', 26379)
+               ],
                      socket_timeout=10,
     sentinel_kwargs={'password': 'test@123'},
     password='test@123',
@@ -30,9 +31,10 @@ sentinel = redis.sentinel.Sentinel(
 
 while True:
     try:
-        master = sentinel.sentinel_get_master_addr_by_name('mymaster')
+        master = sentinel.discover_master('mymaster')
         # master.set('foo', 'bar')
         # result = master.get('foo')
+        print(master)
         print(datetime.datetime.now(), 'ok:', master)
     except Exception as ex:
         print(datetime.datetime.now(), 'error:', ex)
