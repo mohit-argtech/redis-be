@@ -82,7 +82,7 @@ spec:
             port:
               number: 26379
       - pathType: Prefix
-        path: /
+        path: /redisinsight
         backend:
           service:
             name: redisinsight-service
