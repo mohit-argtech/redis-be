@@ -19,11 +19,17 @@ import time
 import redis
 import redis.sentinel
 
+# sentinel = redis.sentinel.Sentinel(
+#     sentinels=[('redis-s0', 26379),
+#                ('redis-s1', 26379),
+#                ('redis-s2', 26379)
+#                ],
+#                      socket_timeout=10,
+#     sentinel_kwargs={'password': 'test@123'},
+#     password='test@123',
+# )
 sentinel = redis.sentinel.Sentinel(
-    sentinels=[('redis-s0', 26379),
-               ('redis-s1', 26379),
-               ('redis-s2', 26379)
-               ],
+    sentinels=[('redis-s0', 26379)],
                      socket_timeout=10,
     sentinel_kwargs={'password': 'test@123'},
     password='test@123',
@@ -31,7 +37,8 @@ sentinel = redis.sentinel.Sentinel(
 
 while True:
     try:
-        master = sentinel.discover_master('mymaster')
+        #master = sentinel.discover_master('mymaster')
+        master = sentinel.sentinel_get_master_addr_by_name('mymaster')
         # master.set('foo', 'bar')
         # result = master.get('foo')
         print(master)
