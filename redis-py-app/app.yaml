@@ -1,29 +1,29 @@
-# apiVersion: apps/v1
-# kind: Deployment
-# metadata:
-#   name: redis-app-deployment
-#   namespace: redis
-#   labels:
-#     app: redis-app
-# spec:
-#   replicas: 2
-#   selector:
-#     matchLabels:
-#       app: redis-app
-#   template:
-#     metadata:
-#       labels:
-#         app: redis-app
-#     spec:
-#       containers:
-#       - name: redis-app-deployment
-#         image: pavansa/redis-app
-#         resources:
-#           requests:
-#             cpu: "100m"
-#         imagePullPolicy: IfNotPresent
-#         ports:
-#         - containerPort: 26379
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-app-deployment
+  namespace: redis
+  labels:
+    app: redis-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: redis-app
+  template:
+    metadata:
+      labels:
+        app: redis-app
+    spec:
+      containers:
+      - name: redis-app-deployment
+        image: sahil2898/be-ts-fastapi:v1.0
+        resources:
+          requests:
+            cpu: "100m"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 26379
 --- 
 apiVersion: v1
 # Indicates this as a service
@@ -73,62 +73,61 @@ spec:
       storage: 8Gi
   storageClassName: gp2
 --- 
-apiVersion: apps/v1
-kind: StatefulSet
-metadata:
-  name: redis-py-app
-  namespace: redis
-  labels:
-    app: redis-py-app #deployment label
-spec:
-  selector:
-    matchLabels:
-      app: redis-py-app # has to match .spec.template.metadata.labels
-  serviceName: "redis-py"
-  replicas: 1 # by default is 1
-  minReadySeconds: 10 # by default is 0
-  template:
-    metadata:
-      labels:
-        app: redis-py-app # has to match .spec.selector.matchLabels
-    spec:
-      updateStrategy: rollingUpdate
-      volumes:
-        - name: db
-          persistentVolumeClaim:
-            claimName: redis-py-app-pvc
-      terminationGracePeriodSeconds: 10
-      containers:
-      - name: redis-python-client-app
-        image: sahil2898/redis-py-code #repo/image
-        ports:
-        - containerPort: 26379
-          name: redis-sentinel
-        volumeMounts:
-        - name: db
-          mountPath: /data
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 26379
-          initialDelaySeconds: 3
-          periodSeconds: 3
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: application
-                    operator: In
-                    values:
-                      - python
-                  - key: company
-                    operator: In
-                    values:
-                      - brompton-energy
-                  - key: role
-                    operator: In
-                    values:
-                      - app
+# apiVersion: apps/v1
+# kind: StatefulSet
+# metadata:
+#   name: redis-py-app
+#   namespace: redis
+#   labels:
+#     app: redis-py-app #deployment label
+# spec:
+#   selector:
+#     matchLabels:
+#       app: redis-py-app # has to match .spec.template.metadata.labels
+#   serviceName: "redis-py"
+#   replicas: 1 # by default is 1
+#   minReadySeconds: 10 # by default is 0
+#   template:
+#     metadata:
+#       labels:
+#         app: redis-py-app # has to match .spec.selector.matchLabels
+#     spec:
+#       volumes:
+#         - name: db
+#           persistentVolumeClaim:
+#             claimName: redis-py-app-pvc
+#       terminationGracePeriodSeconds: 10
+#       containers:
+#       - name: redis-python-client-app
+#         image: sahil2898/be-ts-fastapi:v1.0 #repo/image
+#         ports:
+#         - containerPort: 26379
+#           name: redis-sentinel
+#         volumeMounts:
+#         - name: db
+#           mountPath: /data
+#         livenessProbe:
+#           httpGet:
+#             path: /healthz
+#             port: 26379
+#           initialDelaySeconds: 3
+#           periodSeconds: 3
+#       affinity:
+#         nodeAffinity:
+#           requiredDuringSchedulingIgnoredDuringExecution:
+#             nodeSelectorTerms:
+#               - matchExpressions:
+#                   - key: application
+#                     operator: In
+#                     values:
+#                       - python
+#                   - key: company
+#                     operator: In
+#                     values:
+#                       - brompton-energy
+#                   - key: role
+#                     operator: In
+#                     values:
+#                       - app
 
        
